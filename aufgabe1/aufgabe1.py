@@ -51,9 +51,27 @@ def trans(t):
 
 
 # Aufgabe 2.1 a)
-rX = rotx(np.radians(180))
-rY = roty(np.radians(180))
+print("T (A nach B)")
+rZ = rotz(np.radians(180))
 tl = trans((-2, 0, 0))
-rot = rot2trans(rX.dot(rY))
-t = rot.dot(tl)
-print(t)
+rot = rot2trans(rZ)
+t = tl.dot(rot)
+print(t.round())
+
+print()
+
+print("T (B nach C)")
+rZ = rotz(np.radians(-90))
+tl = trans((-4, -1, 0))
+rot = rot2trans(rZ)
+t = tl.dot(rot)
+print(t.round())
+
+print()
+
+print("T (A nach C)")
+rZ = rotz(np.radians(90))
+tl = trans((2, 1, 0))
+rot = rot2trans(rZ)
+t = tl.dot(rot)
+print(t.round())
