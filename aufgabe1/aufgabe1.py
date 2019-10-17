@@ -24,7 +24,7 @@ def rotz(theta):
 					 (0,  0,  1)))
 
 def rot2trans(r):
-	if len(r) is 2: #len(np.array) liefert die Dimension zurück
+	if len(r[0,]) is 2: #len(np.array) liefert die Dimension zurück
 		return np.array((r[0,0], r[0,1], 0),
 						(r[1,0], r[1,1], 0),
 						(0,		 0,		 1))
