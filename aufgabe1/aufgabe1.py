@@ -55,8 +55,8 @@ print("T (A nach B)")
 rZ = rotz(np.radians(180))
 tl = trans((-2, 0, 0))
 rot = rot2trans(rZ)
-t = tl.dot(rot)
-print(t.round())
+t_ab = tl.dot(rot).round()
+print(t_ab)
 
 print()
 
@@ -64,8 +64,8 @@ print("T (B nach C)")
 rZ = rotz(np.radians(-90))
 tl = trans((-4, -1, 0))
 rot = rot2trans(rZ)
-t = tl.dot(rot)
-print(t.round())
+t_bc = tl.dot(rot).round()
+print(t_bc)
 
 print()
 
@@ -73,5 +73,25 @@ print("T (A nach C)")
 rZ = rotz(np.radians(90))
 tl = trans((2, 1, 0))
 rot = rot2trans(rZ)
-t = tl.dot(rot)
-print(t.round())
+t_ac = tl.dot(rot).round()
+print(t_ac)
+
+print("Aufgbae 2b   T (A nach C)")
+print(np.array_equal(t_ab.dot(t_bc), t_ac))
+
+print()
+
+print("Aufgbae 2c   T (A nach C) invertierung überprüfen")
+rZ = rotz(np.radians(-90))
+tl = trans((-1, 2, 0))
+rot = rot2trans(rZ)
+t_ca = tl.dot(rot).round()
+print(np.array_equal(np.linalg.inv(t_ac), t_ca))
+
+print()
+
+print("Aufgabe 2d")
+p_b = (-3, 1, 0, 1)
+
+p_a = np.dot(t_ab, p_b)
+print(p_a)
