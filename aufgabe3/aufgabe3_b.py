@@ -49,6 +49,8 @@ def gotoGlobal(robot, world, v, p, tol):
 
         omega = np.radians(diff)
 
+
+        # Setzt v auf 0, wenn der Roboter sich neu ausrichten soll. Sorgt für genaues abfahren der Linie
         if abs(diff) > 5:
             robot.move([0, omega])
         else:
@@ -56,9 +58,9 @@ def gotoGlobal(robot, world, v, p, tol):
     return
 
 
-def followPolyline(robot, world, v, polyline):
+def followPolyline(robot, world, v, polyline, tol):
     for p in polyline:
-        gotoGlobal(robot, world, v, p, 0.1)
+        gotoGlobal(robot, world, v, p, tol)
     return
 
 
@@ -76,4 +78,4 @@ myWorld.drawPolyline(polyline)
 myRobot = Robot.Robot()
 myWorld.setRobot(myRobot, [1, 6, 0])
 
-followPolyline(myRobot, myWorld, 1, polyline)
+followPolyline(myRobot, myWorld, 0.5, polyline, 0.1)
