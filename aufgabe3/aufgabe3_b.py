@@ -5,41 +5,52 @@ import Robot_Simulator_V3.geometry as geo
 
 # Länge(Betrag) eines 2D-Vektors
 def vectorLength(v):
-    return (np.sqrt(v[0] ** 2 + v[1] ** 2))[0]
+    return (np.sqrt(v[0] ** 2 + v[1] ** 2))  # [0]
 
 
-def followLine(robot, world, p_x, p_y):
-    p_x_x, p_x_y = p_x
-    p_y_x, p_y_y = p_y
+def followLine(robot, world, p1, p2, tol=0.1, v=0.5):
+    p1_x, p1_y = p1
+    p2_x, p2_y = p2
 
-    g = np.array([p_y_x - p_x_x, p_y_y - p_x_y])
+    while True:
+        g = np.array([p2_x - p1_x, p2_y - p1_y])
 
-    x, y, theta = world.getTrueRobotPose()
+        x, y, theta = world.getTrueRobotPose()
 
-    e = geo.normalToLine((x, y), (p_x, p_y))
+        distance = vectorLength(np.array([[p2_x - x], [p2_y - y]]))
+        if distance < tol:  # Punkt erreicht
+            break
 
-    r = g / np.linalg.norm(g)
+        e = geo.normalToLine((x, y), (p1, p2))
 
-    er = np.add(e, r)
+        r = g / np.linalg.norm(g)
 
-    xv = [er[0], 0]
+        er = np.add(e, r)
 
-    print(er)
-    print(xv)
+        goto_x, goto_y = np.add([x, y], er)
+
+        theta = np.degrees(theta)
+        thetaStern = np.degrees(np.arctan2(goto_y - y, goto_x - x))
+        diff = (thetaStern - theta) % 360
+
+        if diff > 180:
+            diff = diff - 360
+
+        omega = np.radians(diff)
+
+        robot.move([v, omega])
 
 
 def gotoGlobal(robot, world, v, p, tol):
     p_x, p_y = p
 
-    # Robotposition bestimmen:
-    (x, y, theta) = world.getTrueRobotPose()
-
     while True:
+        (x, y, theta) = world.getTrueRobotPose()
+
         distance = vectorLength(np.array([[p_x - x], [p_y - y]]))
         if distance < tol:  # Punkt erreicht
             break
 
-        (x, y, theta) = world.getTrueRobotPose()
         theta = np.degrees(theta)
         thetaStern = np.degrees(np.arctan2(p_y - y, p_x - x))
         diff = (thetaStern - theta) % 360
@@ -49,7 +60,6 @@ def gotoGlobal(robot, world, v, p, tol):
 
         omega = np.radians(diff)
 
-
         # Setzt v auf 0, wenn der Roboter sich neu ausrichten soll. Sorgt für genaues abfahren der Linie
         if abs(diff) > 5:
             robot.move([0, omega])
@@ -58,24 +68,64 @@ def gotoGlobal(robot, world, v, p, tol):
     return
 
 
-def followPolyline(robot, world, v, polyline, tol):
+def followPolyline_MitGoToGlobal(robot, world, v, polyline, tol):
     for p in polyline:
         gotoGlobal(robot, world, v, p, tol)
     return
 
 
-myWorld = World.World(20, 10)
+def followPolyline_MitFollowLine(robot, world, v, polyline, tol):
+    for i in range(len(polyline) - 1):
+        followLine(robot, world, polyline[i], polyline[i + 1], tol, v)
 
-myWorld.addLine(1, 5, 10, 5)
-myWorld.addLine(11, 5, 19, 5)
-myWorld.addLine(1, 7, 19, 7)
-myWorld.addLine(11, 5, 11, 3.5)
-myWorld.addLine(11, 2.5, 11, 1)
 
-polyline = [[1, 6], [10.5, 6], [10.5, 3], [15, 3]]
-myWorld.drawPolyline(polyline)
+def test_followLine():
+    myWorld = World.World(20, 10)
 
-myRobot = Robot.Robot()
-myWorld.setRobot(myRobot, [1, 6, 0])
+    myWorld.drawPolyline([[1, 4], [15, 4]])
 
-followPolyline(myRobot, myWorld, 0.5, polyline, 0.1)
+    myRobot = Robot.Robot()
+    myWorld.setRobot(myRobot, [3, 6, np.radians(90)])
+
+    followLine(myRobot, myWorld, [1, 4], [15, 4])
+
+
+def test_followPoly_GotoGlobal():
+    myWorld = World.World(20, 10)
+
+    myWorld.addLine(1, 5, 10, 5)
+    myWorld.addLine(11, 5, 19, 5)
+    myWorld.addLine(1, 7, 19, 7)
+    myWorld.addLine(11, 5, 11, 3.5)
+    myWorld.addLine(11, 2.5, 11, 1)
+
+    polyline = [[1, 6], [10.5, 6], [10.5, 3], [15, 3]]
+    myWorld.drawPolyline(polyline)
+
+    myRobot = Robot.Robot()
+    myWorld.setRobot(myRobot, [1, 6, 0])
+
+    followPolyline_MitGoToGlobal(myRobot, myWorld, 1, polyline, 0.1)
+
+
+def test_followPoly_FollowLine():
+    myWorld = World.World(20, 10)
+
+    myWorld.addLine(1, 5, 10, 5)
+    myWorld.addLine(11, 5, 19, 5)
+    myWorld.addLine(1, 7, 19, 7)
+    myWorld.addLine(11, 5, 11, 3.5)
+    myWorld.addLine(11, 2.5, 11, 1)
+
+    polyline = [[1, 6], [10.5, 6], [10.5, 3], [18, 3]]
+    myWorld.drawPolyline(polyline)
+
+    myRobot = Robot.Robot()
+    myWorld.setRobot(myRobot, [1, 6, 0])
+
+    followPolyline_MitFollowLine(myRobot, myWorld, 0.5, polyline, 0.8)
+
+
+test_followLine()
+test_followPoly_GotoGlobal()
+test_followPoly_FollowLine()
