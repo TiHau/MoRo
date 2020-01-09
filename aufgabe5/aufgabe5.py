@@ -101,7 +101,7 @@ while True:
     skip_return = False
 
     # Überprüfe auf Boxen
-    boxToPickup = checkForBox(myRobot, myWorld)
+    boxToPickup = checkForBox(myRobot)
     if not boxToPickup:
         if len(myCheckpoints) <= 0:
             # fertig
