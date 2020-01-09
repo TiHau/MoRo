@@ -1,9 +1,8 @@
 from Robot_Simulator_V3 import twoRoomsWorld
 from Robot_Simulator_V3 import Robot
 from aufgabe3.aufgabe3_b import gotoGlobal
-from aufgabe3.aufgabe3_a import curveDrive, straightDrive
+from aufgabe3.aufgabe3_a import straightDrive
 import numpy as np
-from time import sleep
 
 
 def turn(robot, delta_theta):

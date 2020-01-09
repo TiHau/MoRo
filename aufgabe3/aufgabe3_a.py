@@ -22,12 +22,12 @@ def straightDrive(robot, v, l):
         robot.move((v, 0))
 
 
-myWorld = emptyWorld.buildWorld()
-myRobot = Robot.Robot()
-myWorld.setRobot(myRobot, [3, 3, pi / 2])
-
-straightDrive(myRobot, 1, 5)
-curveDrive(myRobot, 1, 4, -180)
-straightDrive(myRobot, 1, 5)
-
-myWorld.close()
+# myWorld = emptyWorld.buildWorld()
+# myRobot = Robot.Robot()
+# myWorld.setRobot(myRobot, [3, 3, pi / 2])
+#
+# straightDrive(myRobot, 1, 5)
+# curveDrive(myRobot, 1, 4, -180)
+# straightDrive(myRobot, 1, 5)
+#
+# myWorld.close()
