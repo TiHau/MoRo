@@ -16,16 +16,13 @@ def turn(robot, delta_theta):
         robot.move((0, omega))
 
 
-def checkForBox(robot, world):
+def checkForBox(robot):
     x = np.pi * 2
     omega = 0.3
-    # last_theta = world.getTrueRobotPose()[2]
     time_needed = abs(x / omega)
     n = int(time_needed / robot.getTimeStep())
     while True:
-        # current_theta = world.getTrueRobotPose()[2]
         n = n - 1
-        # x -= abs(last_theta - current_theta)
         robot.move([0, omega])
         if robot.senseBoxes():
             return robot.senseBoxes()[0]
