@@ -120,4 +120,4 @@ while True:
                 myRobot.placeBox()
             else: #box wurde nicht aufgehoben
                 gotoGlobal(myRobot, myWorld, 0.5, currentCheckpoint, 0.2)
-                boxToPickup = checkForBox(myRobot, myWorld)
+                boxToPickup = checkForBox(myRobot)
