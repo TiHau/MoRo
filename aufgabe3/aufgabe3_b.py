@@ -126,6 +126,7 @@ def test_followPoly_FollowLine():
     followPolyline_MitFollowLine(myRobot, myWorld, 0.5, polyline, 0.8)
 
 
-#test_followLine()
-#test_followPoly_GotoGlobal()
-#test_followPoly_FollowLine()
+if __name__ == "__main__":
+    test_followLine()
+    test_followPoly_GotoGlobal()
+    test_followPoly_FollowLine()

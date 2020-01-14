@@ -30,31 +30,6 @@ def checkForBox(robot):
             return None
 
 
-myWorld = twoRoomsWorld.buildWorld()
-myKeyboardController = myWorld.getKeyboardController()
-myRobot = Robot.Robot()
-myWorld.setRobot(myRobot, [16, 12, 0])
-
-door1_1 = (7, 2.75)
-door1_2 = (9, 2.75)
-door2_1 = (14, 9.75)
-door2_2 = (16, 9.75)
-
-p1 = (4, 11)
-p2 = (4, 4)
-p3 = (12, 4)
-p4 = (12, 11)
-
-depot = (16, 12)
-
-myCheckpoints = [p1, p2, p3, p4]
-myWaypoints = [p1, p2, door1_1, door1_2, p3, p4, door2_1, door2_2, depot]
-
-currentCheckpoint = myCheckpoints.pop(0)
-tempCheckpoint = None
-skip_return = False
-
-
 def returnFromDepot(checkpoint):
     myWaypoints_rev = reversed(myWaypoints)
     for wp in myWaypoints_rev:
@@ -89,35 +64,59 @@ def gotoNextCheckpoint(checkpoint, current):
             gotoGlobal(myRobot, myWorld, 1, wp, 0.2)
 
 
-while True:
-    # Gehe zum nächsten Checkpoint
-    if not skip_return:
-        returnFromDepot(currentCheckpoint)
-    else:
-        last_checkpoint = currentCheckpoint
-        currentCheckpoint = myCheckpoints.pop(0)
-        gotoNextCheckpoint(currentCheckpoint, last_checkpoint)
+if __name__ == "__main__":
+    myWorld = twoRoomsWorld.buildWorld()
+    myKeyboardController = myWorld.getKeyboardController()
+    myRobot = Robot.Robot()
+    myWorld.setRobot(myRobot, [16, 12, 0])
 
+    door1_1 = (7, 2.75)
+    door1_2 = (9, 2.75)
+    door2_1 = (14, 9.75)
+    door2_2 = (16, 9.75)
+
+    p1 = (4, 11)
+    p2 = (4, 4)
+    p3 = (12, 4)
+    p4 = (12, 11)
+
+    depot = (16, 12)
+
+    myCheckpoints = [p1, p2, p3, p4]
+    myWaypoints = [p1, p2, door1_1, door1_2, p3, p4, door2_1, door2_2, depot]
+
+    currentCheckpoint = myCheckpoints.pop(0)
+    tempCheckpoint = None
     skip_return = False
+    while True:
+        # Gehe zum nächsten Checkpoint
+        if not skip_return:
+            returnFromDepot(currentCheckpoint)
+        else:
+            last_checkpoint = currentCheckpoint
+            currentCheckpoint = myCheckpoints.pop(0)
+            gotoNextCheckpoint(currentCheckpoint, last_checkpoint)
 
-    # Überprüfe auf Boxen
-    boxToPickup = checkForBox(myRobot)
-    if not boxToPickup:
-        if len(myCheckpoints) <= 0:
-            # fertig
-            break
+        skip_return = False
 
-        skip_return = True
+        # Überprüfe auf Boxen
+        boxToPickup = checkForBox(myRobot)
+        if not boxToPickup:
+            if len(myCheckpoints) <= 0:
+                # fertig
+                break
 
-    # Fahre zur gefundenen Box und heb sie auf
-    else:
-        while boxToPickup:
-            turn(myRobot, boxToPickup[1])
-            straightDrive(myRobot, 0.5, boxToPickup[0] - 0.2)
-            if myRobot.pickUpBox():
-                boxToPickup = None
-                gotoDepot(currentCheckpoint)
-                myRobot.placeBox()
-            else: #box wurde nicht aufgehoben
-                gotoGlobal(myRobot, myWorld, 0.5, currentCheckpoint, 0.2)
-                boxToPickup = checkForBox(myRobot)
+            skip_return = True
+
+        # Fahre zur gefundenen Box und heb sie auf
+        else:
+            while boxToPickup:
+                turn(myRobot, boxToPickup[1])
+                straightDrive(myRobot, 0.5, boxToPickup[0] - 0.2)
+                if myRobot.pickUpBox():
+                    boxToPickup = None
+                    gotoDepot(currentCheckpoint)
+                    myRobot.placeBox()
+                else:  # box wurde nicht aufgehoben
+                    gotoGlobal(myRobot, myWorld, 0.5, currentCheckpoint, 0.2)
+                    boxToPickup = checkForBox(myRobot)

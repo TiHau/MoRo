@@ -10,17 +10,19 @@ myWorld.setRobot(myRobot, [3, 18, 0])
 
 OMEGA_DEF = 0.3
 
+
 def vectorLength(v):
     return (np.sqrt(v[0] ** 2 + v[1] ** 2))
+
 
 def followLine(p1, p2, tol=0.1, v=0.5):
     p1_x, p1_y = p1
     p2_x, p2_y = p2
-    
+
     g = np.array([p2_x - p1_x, p2_y - p1_y])
     distance = vectorLength(np.array([[p2_x], [p2_y]]))
     if distance < tol:  # Punkt erreicht
-        myRobot.move([v/2, -OMEGA_DEF])
+        myRobot.move([v / 2, -OMEGA_DEF])
         return
     x, y = 0, 0
     e = geo.normalToLine((x, y), (p1, p2))
@@ -34,7 +36,8 @@ def followLine(p1, p2, tol=0.1, v=0.5):
     omega = np.radians(diff)
     myRobot.move([v, omega])
 
-def wander(limit = 1, v = 0.3, o = 0.5):
+
+def wander(limit=1, v=0.3, o=0.5):
     sensor_l = myRobot.sense()[16]
     sensor_m = myRobot.sense()[13]
     sensor_r = myRobot.sense()[10]
@@ -48,7 +51,8 @@ def wander(limit = 1, v = 0.3, o = 0.5):
         myRobot.move([v, 0])
     return
 
-def followWall(v = 0.5, d = 0.75, offset = 1):
+
+def followWall(v=0.5, d=0.75, offset=1):
     directions = myRobot.getSensorDirections()[2:10]
     middle_sensor = myRobot.sense()[13]
     sensors = myRobot.sense()[3:9]
@@ -69,9 +73,11 @@ def followWall(v = 0.5, d = 0.75, offset = 1):
         else:
             followLine(start, end)
     else:
-        myRobot.move([v/2, -OMEGA_DEF])
+        myRobot.move([v / 2, -OMEGA_DEF])
 
-while True:
-    #wander()
-    followWall()
-myWorld.close(False)
+
+if __name__ == "__main__":
+    while True:
+        # wander()
+        followWall()
+    myWorld.close(False)

@@ -50,7 +50,7 @@ def trans(t):
                      (0, 0, 0, 1)))
 
 
-def test():
+if __name__ == "__main__":
     # Aufgabe 2.1 a)
     print("T (A nach B)")
     rZ = rotz(np.radians(180))

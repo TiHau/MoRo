@@ -1,6 +1,7 @@
 from aufgabe1.aufgabe1 import *
 import matplotlib.pyplot as plt
 
+
 def get_alpha(x_p, y_p):
     return np.arctan(y_p / x_p)
 
@@ -52,28 +53,28 @@ def vorKin(p):
     return res.dot(p)
 
 
-test_p = vorKin((0,0,0,1))
-print("Testpunkt: " + str(test_p))
+if __name__ == "__main__":
+    test_p = vorKin((0, 0, 0, 1))
+    print("Testpunkt: " + str(test_p))
 
-a, b1, b2 = invKin(test_p)
+    a, b1, b2 = invKin(test_p)
 
-print("Alpha, Beta1, Beta2: " + str(np.degrees(a)) + "," + str(np.degrees(b1)) + "," + str(np.degrees(b2)))
+    print("Alpha, Beta1, Beta2: " + str(np.degrees(a)) + "," + str(np.degrees(b1)) + "," + str(np.degrees(b2)))
 
-x = 0.8
-r = 0.3
-alphas = []
-beta1s = []
-beta2s = []
+    x = 0.8
+    r = 0.3
+    alphas = []
+    beta1s = []
+    beta2s = []
 
-for t in range(0, 360):
-    a_tmp, b1_tmp, b2_tmp = invKin((x, r*np.cos(np.radians(t)), r*np.sin(np.radians(t)), 1))
-    alphas.append(np.degrees(a_tmp))
-    beta1s.append(np.degrees(b1_tmp))
-    beta2s.append(np.degrees(b2_tmp))
+    for t in range(0, 360):
+        a_tmp, b1_tmp, b2_tmp = invKin((x, r * np.cos(np.radians(t)), r * np.sin(np.radians(t)), 1))
+        alphas.append(np.degrees(a_tmp))
+        beta1s.append(np.degrees(b1_tmp))
+        beta2s.append(np.degrees(b2_tmp))
 
-plt.plot(alphas)
-plt.plot(beta1s)
-plt.plot(beta2s)
-plt.legend(["Alpha", "Beta1", "Beta2"])
-plt.show()
-
+    plt.plot(alphas)
+    plt.plot(beta1s)
+    plt.plot(beta2s)
+    plt.legend(["Alpha", "Beta1", "Beta2"])
+    plt.show()
