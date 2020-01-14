@@ -9,7 +9,7 @@ def curveDrive(robot, world, v=1, r=4, deltaTheta=-np.pi, n=100):
 
     poses = [world.getTrueRobotPose()]
 
-    for t in range(n):
+    for _ in range(n):
         robot.move([v / n, omega / n])
         poses.append(world.getTrueRobotPose())
     return poses
