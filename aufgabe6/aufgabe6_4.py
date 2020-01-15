@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from PoseEstimator import plotUtilities
 from Robot_Simulator_V3 import simpleWorld, Robot
 from aufgabe6.ParticleFilterPoseEstimator import ParticleFilterPoseEstimator
-from aufgabe6.aufgabe6_1 import curveDrive
 
 
 def test_teil_a():
@@ -89,10 +88,10 @@ def test_teil_c():
 
 def test_teil_d():
     myWorld = simpleWorld.buildWorld()
-    #myWorld.addLine(2, 6, 4, 6)
-    #myWorld.addLine(6, 2, 6, 6)
-    #myWorld.addLine(6, 6, 10, 6)
-    #myWorld.addLine(4, 10, 16, 10)
+    myWorld.addLine(2, 6, 4, 6)
+    myWorld.addLine(6, 2, 6, 6)
+    myWorld.addLine(6, 6, 10, 6)
+    myWorld.addLine(4, 10, 16, 10)
     myRobot = Robot.Robot()
     myWorld.setRobot(myRobot, [4, 4, np.pi / 2])
     myParticle = ParticleFilterPoseEstimator()
@@ -117,7 +116,7 @@ def test_teil_d():
         myParticle.integrateMeasurement(myRobot.sense(), myRobot.getSensorDirections(), myWorld.getDistanceGrid())
         filterPoses.append(myParticle.getPose())
 
-        if i % (n/10) == 0:
+        if i % (n / 10) == 0:
             plotUtilities.plotPositions(realPoses, 'b')
             plotUtilities.plotPositions(filterPoses, 'g')
             plotUtilities.plotPoseParticles(myParticle.Particles, color='r')
