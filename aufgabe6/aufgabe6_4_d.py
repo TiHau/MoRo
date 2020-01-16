@@ -10,7 +10,7 @@ if __name__ == "__main__":
     myWorld.addLine(2, 6, 4, 6)
     myWorld.addLine(6, 2, 6, 6)
     myWorld.addLine(6, 6, 10, 6)
-    myWorld.addDynObstacleLine(4, 10, 16, 10)
+    myWorld.addLine(4, 10, 16, 10)
     myRobot = Robot.Robot()
     myWorld.setRobot(myRobot, [4, 4, np.pi / 2])
     myParticle = ParticleFilterPoseEstimator()

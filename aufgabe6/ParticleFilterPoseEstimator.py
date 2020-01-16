@@ -75,7 +75,7 @@ class ParticleFilterPoseEstimator:
                 x, y = coord[0]
                 dist = distanceMap.getValue(x, y)
                 if dist is not None:
-                    p = (1 / (np.sqrt(0.0032 * np.pi))) * np.exp(-0.5 * (dist ** 2) / 0.0016)
+                    p = (1 / (np.sqrt(0.0032 * np.pi))) * np.exp(-0.5 * (dist ** 2) / 0.0032)
                     prob = prob * p
             chance.append(prob)
             weightedParticles.append(i)
